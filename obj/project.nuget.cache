@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "rH1h1t1C5Lnw2bOydNz7906GlrdCa8u3ztNwrnees367ZV+AQzJUC2TNl/ayeLAK0TI1ScAHhTwBtwjUBeQrjg==",
+  "success": true,
+  "projectFilePath": "/home/aymane/Documents/appLogement/appLogement.csproj",
+  "expectedPackageFiles": [
+    "/home/aymane/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "/home/aymane/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
+    "/home/aymane/.nuget/packages/swashbuckle.aspnetcore/6.2.3/swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "/home/aymane/.nuget/packages/swashbuckle.aspnetcore.swagger/6.2.3/swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "/home/aymane/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.2.3/swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "/home/aymane/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.2.3/swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
