@@ -4,8 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 public class Listing
 {
-         public ObjectId Id { get; set; }  
-         public string title { get; set; }
+     public ObjectId Id { get; set; }  
+     public string title { get; set; }
     public string description { get; set; }
     public string imageSrc { get; set; }
     public DateTime createdAt { get; set; }

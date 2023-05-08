@@ -4,17 +4,20 @@ using MongoDB.Bson;
 public class ListingService
 {
     private readonly IMongoCollection<Listing> _listings;
+    private readonly DbContext _dbContext;
+    public ListingService(DbContext dbContext)
 
-    public ListingService(IConfiguration config)
     {
-        var client = new MongoClient("mongodb+srv://aymane:aymane@cluster0.qgk357r.mongodb.net");
-        var database = client.GetDatabase("test");
-        _listings = database.GetCollection<Listing>("Listing");
+
+        _dbContext = dbContext;
+       
     }
 
     public async Task<List<Listing>> GetListings()
     {
-        return await _listings.Find(listing => true).ToListAsync();
+        return await _dbContext.Listing.Find(listing => true).ToListAsync();
+
     }
+        
 }
 
