@@ -1,7 +1,8 @@
   using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
-  public class User
+using Microsoft.AspNetCore.Identity;
+  public class User 
     {
         public ObjectId Id { get; set; }
         public string Name { get; set; }

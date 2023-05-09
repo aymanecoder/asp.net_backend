@@ -2,11 +2,11 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
-
+using MongoDB.Driver;
 namespace appLogement.Controllers
 {
     [Route("api/register")]
-    public class RegisterController : Controller
+    public class RegisterController : Controller 
     {
         private readonly DbContext _dbContext;
 
@@ -24,8 +24,9 @@ namespace appLogement.Controllers
                 return BadRequest("Invalid user object.");
             }
 
-            // Check if user already exists
-            if (_dbContext.User.Any(u => u.Email == user.Email))
+             var filter = Builders<User>.Filter.Eq(u => u.Email, user.Email);
+            var existingUser = _dbContext.User.Find(filter).FirstOrDefault();
+            if (existingUser != null)
             {
                 return BadRequest("User already exists.");
             }
