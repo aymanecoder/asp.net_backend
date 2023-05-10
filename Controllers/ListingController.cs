@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-
+using System.IdentityModel.Tokens.Jwt;
 [ApiController]
 [Route("[controller]")]
 public class ListingsController : ControllerBase
@@ -27,18 +27,11 @@ public class ListingsController : ControllerBase
     {
         return await _listingService.GetListings();
     }
-
-    [HttpPost]
-    [Authorize]
+[HttpPost]
+[Authorize]
 public async Task<ActionResult<Listing>> CreateListing([FromBody] Listing listing)
 {
-    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
-    if (userIdClaim == null)
-    {
-        return Unauthorized();
-    }
-
-    var userId = new ObjectId(userIdClaim.Value);
+    var userId = new ObjectId(User.FindFirstValue("sub"));
 
     var user = await _loginService.GetUserById(userId);
     if (user == null)
@@ -53,6 +46,5 @@ public async Task<ActionResult<Listing>> CreateListing([FromBody] Listing listin
 
     return CreatedAtRoute("GetListingById", new { id = listing.Id }, listing);
 }
-
   
 }
