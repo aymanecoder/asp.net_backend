@@ -10,7 +10,7 @@ public class ListingService
     {
 
         _dbContext = dbContext;
-       
+
     }
 
     public async Task<List<Listing>> GetListings()
@@ -20,9 +20,21 @@ public class ListingService
     }
     public async Task CreateListing(Listing listing)
 {
-   
+
     await _dbContext.Listing.InsertOneAsync(listing);
 }
-        
+
+public async Task<Listing> GetListingById(ObjectId id)
+{
+    var filter = Builders<Listing>.Filter.Eq("_id", id);
+    var listing = await _dbContext.Listing.Find(filter).FirstOrDefaultAsync();
+    return listing;
+}
+
+public async Task DeleteListing(ObjectId id)
+{
+    var filter = Builders<Listing>.Filter.Eq("_id", id);
+    await _dbContext.Listing.DeleteOneAsync(filter);
+}
 }
 
