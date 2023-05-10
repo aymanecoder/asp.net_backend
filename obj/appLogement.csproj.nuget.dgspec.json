@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Source\\Repos\\asp.net_backend\\appLogement.csproj": {}
+    "C:\\Users\\HP\\source\\repos\\asp.net_backend\\appLogement.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Source\\Repos\\asp.net_backend\\appLogement.csproj": {
+    "C:\\Users\\HP\\source\\repos\\asp.net_backend\\appLogement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Source\\Repos\\asp.net_backend\\appLogement.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\asp.net_backend\\appLogement.csproj",
         "projectName": "appLogement",
-        "projectPath": "C:\\Users\\HP\\Source\\Repos\\asp.net_backend\\appLogement.csproj",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\asp.net_backend\\appLogement.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Source\\Repos\\asp.net_backend\\obj\\",
+        "outputPath": "C:\\Users\\HP\\source\\repos\\asp.net_backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,26 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "IdentityModel": {
+              "target": "Package",
+              "version": "[6.1.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[7.0.5, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[2.19.1, )"
+            },
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.19.1, )"
@@ -47,6 +67,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.30.0, )"
             }
           },
           "imports": [

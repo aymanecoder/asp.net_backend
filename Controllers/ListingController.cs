@@ -1,21 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using System.Collections.Generic;
+namespace appLogement.Controllers;
+using MongoDB.Bson;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
-[Route("api/listing")]
-public class ListingController : ControllerBase
+[Route("[controller]")]
+public class ListingsController : ControllerBase
 {
-    private readonly IMongoCollection<Listing> _collection;
+    private readonly ListingService _listingService;
+    private readonly LoginService _loginService;
 
-    public ListingController(DbContext dbContext)
+
+    public ListingsController(ListingService listingService,LoginService loginService)
     {
-        _collection = dbContext.Listing;
+        _listingService = listingService;
+        _loginService = loginService;
+
+
+
     }
 
     [HttpGet]
-    public IEnumerable<Listing> Get()
+    public async Task<ActionResult<List<Listing>>> Get()
     {
-        return _collection.Find(x => true).ToList();
+        return await _listingService.GetListings();
     }
+
+    [HttpPost]
+    [Authorize]
+public async Task<ActionResult<Listing>> CreateListing([FromBody] Listing listing)
+{
+    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
+    if (userIdClaim == null)
+    {
+        return Unauthorized();
+    }
+
+    var userId = new ObjectId(userIdClaim.Value);
+
+    var user = await _loginService.GetUserById(userId);
+    if (user == null)
+    {
+        return BadRequest("Invalid user ID.");
+    }
+
+    listing.userId = userId;
+    listing.createdAt = DateTime.Now;
+
+    await _listingService.CreateListing(listing);
+
+    return CreatedAtRoute("GetListingById", new { id = listing.Id }, listing);
+}
+
+
 }
