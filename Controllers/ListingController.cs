@@ -4,6 +4,9 @@ using MongoDB.Bson;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using System.Text;
 
 [ApiController]
 [Route("[controller]")]
@@ -11,15 +14,13 @@ public class ListingsController : ControllerBase
 {
     private readonly ListingService _listingService;
     private readonly LoginService _loginService;
+    private readonly IConfiguration _configuration;
 
-
-    public ListingsController(ListingService listingService,LoginService loginService)
+    public ListingsController(ListingService listingService, LoginService loginService, IConfiguration configuration)
     {
         _listingService = listingService;
         _loginService = loginService;
-
-
-
+         _configuration = configuration;
     }
 
     [HttpGet]
@@ -28,31 +29,50 @@ public class ListingsController : ControllerBase
         return await _listingService.GetListings();
     }
 
+
     [HttpPost]
-    [Authorize]
-public async Task<ActionResult<Listing>> CreateListing([FromBody] Listing listing)
-{
-    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name);
-    if (userIdClaim == null)
+    public async Task<IActionResult>  CreateListing([FromBody] Listing listing)
     {
-        return Unauthorized();
-    }
+        // Get the user ID from the authorization token
+        if (!Request.Headers.TryGetValue("Authorization", out var authHeader))
+        {
+            return Unauthorized();
+        }
 
-    var userId = new ObjectId(userIdClaim.Value);
+        var accessToken = authHeader.ToString().Replace("Bearer ", "");
 
-    var user = await _loginService.GetUserById(userId);
-    if (user == null)
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+        // Parse the token and extract the user ID claim
+        var token = tokenHandler.ReadJwtToken(accessToken);
+     var userId = token.Claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+        Console.WriteLine($"User ID: {token.Claims}");
+            var claims = token.Claims.ToList();
+
+    // Display the claims in the console output
+    Console.WriteLine($"Token claims:");
+    foreach (var claim in claims)
     {
-        return BadRequest("Invalid user ID.");
+        Console.WriteLine($"{claim.Type}: {claim.Value}");
     }
+        if (userId == null)
+        {
+            return BadRequest("Invalid user ID.");
+        }
 
-    listing.userId = userId;
-    listing.createdAt = DateTime.Now;
+        // Verify that the user ID is valid
+        var user = await _loginService.GetUserById(new ObjectId(userId));
+        if (user == null)
+        {
+            return BadRequest("Invalid user ID.");
+        }
 
-    await _listingService.CreateListing(listing);
+        // Set the user ID and creation date for the new listing
+        listing.userId = new ObjectId(userId);
+        listing.createdAt = DateTime.Now;
 
-    return CreatedAtRoute("GetListingById", new { id = listing.Id }, listing);
-}
-
-
+        // Create the new listing
+         await _listingService.CreateListing(listing);
+         return Ok();
+    }
 }
