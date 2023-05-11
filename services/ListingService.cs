@@ -19,9 +19,30 @@ public class ListingService
 
     }
     public async Task CreateListing(Listing listing)
-{
-
+    {
     await _dbContext.Listing.InsertOneAsync(listing);
+    }
+
+public async Task<bool> DeleteListing(ObjectId listingId, ObjectId userId)
+{
+    // Check if the user owns the listing
+    var listing = await GetListingById(listingId);
+    if (listing == null)
+    {
+        return false;
+    }
+
+    if (listing.userId != userId)
+    {
+        return false;
+    }
+
+    // Delete the listing from the database
+    var result = await _dbContext.Listing.DeleteOneAsync(
+        Builders<Listing>.Filter.Eq(l => l.Id, listingId)
+    );
+
+    return result.DeletedCount > 0;
 }
 
 public async Task<Listing> GetListingById(ObjectId id)
@@ -31,10 +52,5 @@ public async Task<Listing> GetListingById(ObjectId id)
     return listing;
 }
 
-public async Task DeleteListing(ObjectId id)
-{
-    var filter = Builders<Listing>.Filter.Eq("_id", id);
-    await _dbContext.Listing.DeleteOneAsync(filter);
-}
 }
 
