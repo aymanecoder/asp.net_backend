@@ -52,6 +52,28 @@ public async Task<bool> DeleteListing(ObjectId listingId, ObjectId userId)
 
     return result.DeletedCount > 0;
 }
+
+public async Task<bool> UpdateListing(Listing listing)
+{
+    try
+    {
+        var filter = Builders<Listing>.Filter.Eq(l => l.Id, listing.Id);
+        var update = Builders<Listing>.Update
+            .Set(l => l.title, listing.title)
+            .Set(l => l.description, listing.description)
+            .Set(l => l.price, listing.price);
+
+        var result = await _listings.ReplaceOneAsync(filter, listing);
+
+        return result.ModifiedCount > 0;
+    }
+    catch (Exception ex)
+    {
+        // Log the exception
+        Console.WriteLine(ex.ToString());
+        return false;
+    }
+}
         
 }
 
