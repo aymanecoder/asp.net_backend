@@ -19,12 +19,12 @@ namespace appLogement.Controllers
         public IActionResult Register([FromBody] User user)
         {
             // Validate input
-            if (user == null || string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            if (user == null || string.IsNullOrEmpty(user.name) || string.IsNullOrEmpty(user.email) || string.IsNullOrEmpty(user.password))
             {
                 return BadRequest("Invalid user object.");
             }
 
-             var filter = Builders<User>.Filter.Eq(u => u.Email, user.Email);
+             var filter = Builders<User>.Filter.Eq(u => u.email, user.email);
             var existingUser = _dbContext.User.Find(filter).FirstOrDefault();
             if (existingUser != null)
             {
@@ -33,7 +33,7 @@ namespace appLogement.Controllers
 
             // Hash password and save user to database
             var passwordHasher = new PasswordHasher<User>();
-            user.Password = passwordHasher.HashPassword(user, user.Password);
+            user.password = passwordHasher.HashPassword(user, user.password);
             _dbContext.User.InsertOne(user);
 
             return Ok("User created successfully.");

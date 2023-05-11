@@ -26,14 +26,14 @@ public class LoginController : Controller
     public async Task<IActionResult> Login([FromBody] User user)
     {
         // Validate input
-        if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+        if (user == null || string.IsNullOrEmpty(user.email) || string.IsNullOrEmpty(user.password))
         {
             return BadRequest("Invalid user object.");
         }
 
         // Authenticate user against database
-        var dbUser = await _dbContext.User.Find(u => u.Email == user.Email).FirstOrDefaultAsync();
-        if (dbUser == null || !new PasswordHasher<User>().VerifyHashedPassword(dbUser, dbUser.Password, user.Password).Equals(PasswordVerificationResult.Success))
+        var dbUser = await _dbContext.User.Find(u => u.email == user.email).FirstOrDefaultAsync();
+        if (dbUser == null || !new PasswordHasher<User>().VerifyHashedPassword(dbUser, dbUser.password, user.password).Equals(PasswordVerificationResult.Success))
         {
             return Unauthorized("Invalid email or password.");
         }
