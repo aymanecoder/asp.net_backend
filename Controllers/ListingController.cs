@@ -118,9 +118,6 @@ public async Task<IActionResult> DeleteListing(string id)
     return Ok();
 }
 
-<<<<<<< HEAD
-}
-=======
 [HttpPut("{id:length(24)}")]
 public async Task<IActionResult> UpdateListing(string id, [FromBody] Listing listing)
 {
@@ -174,4 +171,3 @@ public async Task<IActionResult> UpdateListing(string id, [FromBody] Listing lis
 }
 
 }
->>>>>>> ff567ab5f3af7860134b0089de42bfd66e39775d

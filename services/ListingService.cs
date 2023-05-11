@@ -23,6 +23,13 @@ public class ListingService
     await _dbContext.Listing.InsertOneAsync(listing);
     }
 
+public async Task<Listing> GetListingById(ObjectId id)
+{
+    var filter = Builders<Listing>.Filter.Eq("_id", id);
+    var listing = await _dbContext.Listing.Find(filter).FirstOrDefaultAsync();
+    return listing;
+}
+
 public async Task<bool> DeleteListing(ObjectId listingId, ObjectId userId)
 {
     // Check if the user owns the listing
@@ -45,15 +52,6 @@ public async Task<bool> DeleteListing(ObjectId listingId, ObjectId userId)
     return result.DeletedCount > 0;
 }
 
-<<<<<<< HEAD
-public async Task<Listing> GetListingById(ObjectId id)
-{
-    var filter = Builders<Listing>.Filter.Eq("_id", id);
-    var listing = await _dbContext.Listing.Find(filter).FirstOrDefaultAsync();
-    return listing;
-}
-
-=======
 public async Task<bool> UpdateListing(Listing listing)
 {
     try
@@ -75,7 +73,6 @@ public async Task<bool> UpdateListing(Listing listing)
         return false;
     }
 }
-        
->>>>>>> ff567ab5f3af7860134b0089de42bfd66e39775d
+
 }
 
