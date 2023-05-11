@@ -9,7 +9,7 @@ public class DbContext
     {
         var connectionString = "mongodb+srv://aymane:aymane@cluster0.qgk357r.mongodb.net/test?retryWrites=true&w=majority";
         _client = new MongoClient(connectionString);
-        _database = _client.GetDatabase("test");
+        _database = _client.GetDatabase("test2");
     }
 
     public IMongoCollection<Listing> Listing => _database.GetCollection<Listing>("Listing");

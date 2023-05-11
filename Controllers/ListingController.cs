@@ -70,7 +70,7 @@ public class ListingsController : ControllerBase
 
         // Set the user ID and creation date for the new listing
         listing.userId = new ObjectId(userId);
-        listing.createdAt = DateTime.Now;
+        listing.createdAt = DateTimeOffset.UtcNow;
 
         // Create the new listing
          await _listingService.CreateListing(listing);

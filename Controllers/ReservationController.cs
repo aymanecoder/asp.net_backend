@@ -15,13 +15,22 @@ using Microsoft.AspNetCore.Mvc;
 public class ReservationController : Controller {
        private readonly ReservationService _reservationService;
     private readonly LoginService _loginService;
+        private readonly ListingService _listingService;
+
     private readonly IConfiguration _configuration;
 
-    public ReservationController(ReservationService reservationService, LoginService loginService, IConfiguration configuration)
+    public ReservationController(ReservationService reservationService, LoginService loginService, IConfiguration configuration,ListingService listingService)
     {
         _reservationService = reservationService;
         _loginService = loginService;
          _configuration = configuration;
+         _listingService=listingService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<Reservation>>> Get()
+    {
+        return await _reservationService.GetReservations();
     }
 
     [HttpPost]
@@ -52,10 +61,11 @@ public async Task<IActionResult> CreateReservation([FromBody] Reservation reserv
     {
         return BadRequest("Invalid user ID.");
     }
-
+    listing=await _listingService.GetListingById(reservation.ListingId);
     // Set the user ID and creation date for the new reservation
     reservation.UserId = userId;
     reservation.CreatedAt = DateTime.UtcNow;
+    reservation.TotalPrice = listing.price * (reservation.EndDate - reservation.StartDate).Days;
 
     // Create the new reservation
     await _reservationService.CreateReservation(reservation);

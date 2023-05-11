@@ -30,6 +30,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // Add other services
 builder.Services.AddSingleton<ListingService>();
+builder.Services.AddSingleton<ReservationService>();
 builder.Services.AddSingleton<LoginService>();
 builder.Services.AddSingleton<DbContext>();
 builder.Services.AddControllers();

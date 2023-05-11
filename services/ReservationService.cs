@@ -10,23 +10,29 @@ public class ReservationService
     {
 
         _dbContext = dbContext;
-       
+
+    }
+
+    public async Task<List<Reservation>> GetReservations()
+    {
+        return await _dbContext.Reservation.Find(listing => true).ToListAsync();
+
     }
 
     public async Task CreateReservation(Reservation reservation)
-{
-    try
     {
-        await _dbContext.Reservation.InsertOneAsync(reservation);
+        try
+        {
+            await _dbContext.Reservation.InsertOneAsync(reservation);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+
     }
-    catch (Exception ex)
-    {
-        // Log the exception
-        Console.WriteLine(ex.Message);
-        throw;
-    }
-    
-}
     public async Task<Reservation> GetReservationById(string id)
 {
     try
@@ -83,6 +89,6 @@ public async Task<bool> DeleteReservation(string id)
     }
 }
 }
-        
+
 
 
