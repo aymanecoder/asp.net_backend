@@ -14,5 +14,6 @@ public class DbContext
 
     public IMongoCollection<Listing> Listing => _database.GetCollection<Listing>("Listing");
     public IMongoCollection<User> User => _database.GetCollection<User>("User");
+        public IMongoCollection<Reservation> Reservation => _database.GetCollection<Reservation>("Reservation");
 
 }

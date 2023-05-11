@@ -45,6 +45,7 @@ public async Task<bool> DeleteListing(ObjectId listingId, ObjectId userId)
     return result.DeletedCount > 0;
 }
 
+<<<<<<< HEAD
 public async Task<Listing> GetListingById(ObjectId id)
 {
     var filter = Builders<Listing>.Filter.Eq("_id", id);
@@ -52,5 +53,29 @@ public async Task<Listing> GetListingById(ObjectId id)
     return listing;
 }
 
+=======
+public async Task<bool> UpdateListing(Listing listing)
+{
+    try
+    {
+        var filter = Builders<Listing>.Filter.Eq(l => l.Id, listing.Id);
+        var update = Builders<Listing>.Update
+            .Set(l => l.title, listing.title)
+            .Set(l => l.description, listing.description)
+            .Set(l => l.price, listing.price);
+
+        var result = await _listings.ReplaceOneAsync(filter, listing);
+
+        return result.ModifiedCount > 0;
+    }
+    catch (Exception ex)
+    {
+        // Log the exception
+        Console.WriteLine(ex.ToString());
+        return false;
+    }
+}
+        
+>>>>>>> ff567ab5f3af7860134b0089de42bfd66e39775d
 }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
@@ -117,4 +118,60 @@ public async Task<IActionResult> DeleteListing(string id)
     return Ok();
 }
 
+<<<<<<< HEAD
 }
+=======
+[HttpPut("{id:length(24)}")]
+public async Task<IActionResult> UpdateListing(string id, [FromBody] Listing listing)
+{
+    // Get the user ID from the authorization token
+    if (!Request.Headers.TryGetValue("Authorization", out var authHeader))
+    {
+        return Unauthorized();
+    }
+
+    var accessToken = authHeader.ToString().Replace("Bearer ", "");
+
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
+    // Parse the token and extract the user ID claim
+    var token = tokenHandler.ReadJwtToken(accessToken);
+    var userId = token.Claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+
+    if (userId == null)
+    {
+        return BadRequest("Invalid user ID.");
+    }
+
+    // Verify that the user ID is valid
+    var user = await _loginService.GetUserById(new ObjectId(userId));
+    if (user == null)
+    {
+        return BadRequest("Invalid user ID.");
+    }
+
+    // Check if the listing exists
+    var existingListing = await _listingService.GetListingById(new ObjectId(id));
+    if (existingListing == null)
+    {
+        return NotFound("Listing not found.");
+    }
+
+    // Check if the user is authorized to update the listing
+    if (existingListing.userId != new ObjectId(userId))
+    {
+        return Forbid("User is not authorized to update this listing.");
+    }
+
+    // Update the existing listing
+    existingListing.title = listing.title;
+    existingListing.description = listing.description;
+    existingListing.price = listing.price;
+
+    await _listingService.UpdateListing(existingListing);
+
+    return Ok(existingListing);
+}
+
+}
+>>>>>>> ff567ab5f3af7860134b0089de42bfd66e39775d

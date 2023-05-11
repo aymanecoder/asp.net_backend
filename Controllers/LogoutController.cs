@@ -51,6 +51,12 @@ public IActionResult Logout()
     Response.Headers.Add("Authorization", "Bearer " + newTokenString);
 
     return Ok();
+<<<<<<< HEAD
 }
 
 }
+=======
+}
+
+}
+>>>>>>> ff567ab5f3af7860134b0089de42bfd66e39775d
